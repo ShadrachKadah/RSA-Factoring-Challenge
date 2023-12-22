@@ -1,32 +1,41 @@
-#!/usr/bin/python3
-"""
-Factorize numbers in a file into a product of two prime numbers
-"""
-import sys
+ n < 2:
+        return False
+    for i in range(2, int(sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
 
 
-def factorize():
-    """
-    A function to search file and factorize the given set of numbers into two prime numbers (format n = p*q)
-    """
-    try:
-        file = sys.argv[1]
-        with open(file) as f:
-            for line_number in f:
-                line_number = int(line_number)
-                if line_number % 2 == 0:
-                        print("{}={}*{}".format(line_number, line_number // 2, 2))
-                        continue
-                i = 3
-                while i < line_number // 2:
-                    if line_number % i == 0:
-                        print("{}={}*{}".format(line_number, line_number // i, i))
-                        break
-                    i = i + 2
-                if i == (line_number // 2) + 1:
-                    print("{}={}*{}".format(line_number, line_number, 1))
-    except (IndexError):
-        pass
+# Define a function to factor a single RSA number using the trial division method
+def factor_rsa_number(n):
+    # Initialize an empty list to store the prime factors of n
+    factors = []
+    # Check if 2 is a factor of n
+    while n % 2 == 0:
+        factors.append(2)
+        n //= 2
+    # Check for odd prime factors up to sqrt(n)
+    i = 3
+    while i <= sqrt(n):
+        if n % i == 0:
+            factors.append(i)
+            n //= i
+        else:
+            i += 2
+    # If n is still greater than 2, it must be prime
+    if n > 2:
+        factors.append(n)
+    # If only one factor is found, return it as p and n//p as q
+    if len(factors) == 1:
+        p = factors[0]
+        q = n // p
+        return (p, q)
+    # If more than one factor is found, recursively factor each factor until all are prime
+    else:
+        pq = []
+        for factor in factors:
+            if is_prime(factor):
+                pq.append(factor)
+            else:
+                p, q = factor_rsa_number(factor)
 
-
-factorize()
